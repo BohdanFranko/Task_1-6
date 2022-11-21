@@ -28,7 +28,7 @@ public class TransportList implements List<Transport> {
     /**
      * Class TransportListIterator that implements methods of Iterator interface.
      */
-    private static class TransportListIterator<T> implements Iterator<T> {
+    private class TransportListIterator<T> implements Iterator<T> {
 
         private Predicate<T> predicate;
         private int counter;
