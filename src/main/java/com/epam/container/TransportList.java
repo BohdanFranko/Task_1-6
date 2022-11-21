@@ -101,7 +101,7 @@ public class TransportList<T> implements List<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new TransportListIterator<T>();
+        return new TransportListIterator<>();
     }
 
     /**

@@ -2,6 +2,8 @@ package com.epam.container;
 
 
 import com.epam.transport.Automobile;
+import com.epam.transport.Bike;
+import com.epam.transport.Vehicle;
 import com.epam.transport.VehicleType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -157,7 +159,7 @@ class ContainerTest {
         testArrayExpected[1] = auto;
         testArrayExpected[2] = auto;
 
-        Object[] testArrayActual = container.toArray(new Automobile[3]);
+        Vehicle[] testArrayActual = container.toArray(new Vehicle[3]);
 
         boolean equals = true;
         for (int i = 0; i < 3; i++) {
@@ -182,7 +184,7 @@ class ContainerTest {
         testArrayExpected[1] = auto;
         testArrayExpected[2] = auto;
 
-        Object[] testArrayActual = container.toArray(new Automobile[100]);
+        Vehicle[] testArrayActual = container.toArray(new Vehicle[100]);
 
         boolean equals = true;
         for (int i = 0; i < 3; i++) {
@@ -207,7 +209,7 @@ class ContainerTest {
         testArrayExpected[1] = auto;
         testArrayExpected[2] = auto;
 
-        Object[] testArrayActual = container.toArray(new Automobile[0]);
+        Vehicle[] testArrayActual = container.toArray(new Vehicle[0]);
 
         boolean equals = true;
         for (int i = 0; i < 3; i++) {

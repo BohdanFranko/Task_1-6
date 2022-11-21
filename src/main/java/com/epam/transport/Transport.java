@@ -4,7 +4,6 @@ package com.epam.transport;
  * Class Transport that contains fields and methods to describe a Transport.
  */
 public abstract class Transport {
-    private final int DEFAULT_MIN = 0;
 
     private int speed;
     private int capacity;
@@ -26,8 +25,8 @@ public abstract class Transport {
     }
 
     public Transport() {
-        setSpeed(DEFAULT_MIN);
-        setCapacity(DEFAULT_MIN);
+        setSpeed(0);
+        setCapacity(0);
     }
 
     public Transport(int speed, int capacity) {
