@@ -31,6 +31,7 @@ public class Automobile extends Vehicle {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if(!super.equals(o)) return false;
         Automobile automobile = (Automobile) o;
         return Objects.equals(brand, automobile.brand);
     }

@@ -131,7 +131,7 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public <T> T[] toArray(T[] ts) {
-        return (T[]) toArray();
+        return Arrays.copyOf(ts, size);
     }
 
     /**
@@ -198,7 +198,9 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public boolean addAll(int i, Collection<? extends Transport> collection) {
-        collection.forEach(obj -> add(i, obj));
+        for (Transport transport : collection) {
+            add(i++,transport);
+        }
         return true;
     }
 
