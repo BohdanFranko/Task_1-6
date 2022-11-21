@@ -274,6 +274,8 @@ class ContainerTest {
 
         assertEquals(firstInsertedAuto, container.get(0));
         assertEquals(secondInsertedAuto, container.get(1));
+        assertEquals(auto,container.get(2));
+        assertEquals(auto,container.get(3));
     }
 
     @ParameterizedTest
@@ -291,8 +293,10 @@ class ContainerTest {
 
         container.addAll(1, collectionContainer);
 
+        assertEquals(auto,container.get(0));
         assertEquals(firstInsertedAuto, container.get(1));
         assertEquals(secondInsertedAuto, container.get(2));
+        assertEquals(auto,container.get(3));
     }
 
     @ParameterizedTest
@@ -309,6 +313,8 @@ class ContainerTest {
 
         container.addAll(2, collectionContainer);
 
+        assertEquals(auto,container.get(0));
+        assertEquals(auto,container.get(1));
         assertEquals(firstInsertedAuto, container.get(2));
         assertEquals(secondInsertedAuto, container.get(3));
     }

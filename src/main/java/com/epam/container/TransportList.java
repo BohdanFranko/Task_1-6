@@ -202,8 +202,9 @@ public class TransportList<T> implements List<T> {
      */
     @Override
     public boolean addAll(int i, Collection<? extends T> collection) {
-        System.arraycopy(containerOfTransports, i + 1, containerOfTransports, i, size - i - 1 + collection.size());
+        containerOfTransports = Arrays.copyOf(containerOfTransports, size + collection.size());
         size += collection.size();
+        System.arraycopy(containerOfTransports, i, containerOfTransports, i + collection.size(), size - collection.size() - i);
         for (T transport : collection) {
             containerOfTransports[i++] = transport;
         }
