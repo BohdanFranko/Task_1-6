@@ -3,6 +3,9 @@ package com.epam.container;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
+/**
+ * Class TransportListIterator that implements methods of Iterator interface.
+ */
 public class TransportListIterator<T> implements Iterator<T> {
 
     private Predicate<T> predicate;
@@ -21,7 +24,8 @@ public class TransportListIterator<T> implements Iterator<T> {
 
 
     /**
-     * @return
+     * Returns true if the iteration has more elements
+     * @return true if the iteration has more elements
      */
     @Override
     public boolean hasNext() {
@@ -38,7 +42,8 @@ public class TransportListIterator<T> implements Iterator<T> {
     }
 
     /**
-     * @return
+     * Returns the next element in the iteration.
+     * @return the next element in the iteration
      */
     @Override
     public T next() {

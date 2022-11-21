@@ -6,16 +6,15 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * Class Container that implements and contains methods of List interface.
+ * Class TransportList that implements and contains methods of List interface.
  */
 public class TransportList implements List<Transport> {
-    //Number of fields in Transport class
+
     private final int NUMBER_OF_FIELDS = 4;
     private final static int INITIAL_CAPACITY = 5;
     private int size;
     Transport[] array;
 
-    //implement easier, remove repeatable rows
     public TransportList() {
         this(INITIAL_CAPACITY);
     }
@@ -51,7 +50,7 @@ public class TransportList implements List<Transport> {
     }
 
     /**
-     * Returns an iterator over the elements in this list in specified sequence by ConditionalAuto and conditions[]
+     * Returns an iterator over the elements in this list in proper sequence.
      */
     @Override
     public Iterator<Transport> iterator() {
@@ -72,6 +71,12 @@ public class TransportList implements List<Transport> {
         };
     }
 
+    /**
+     * Returns an iterator over the elements in specified by Predicate sequence
+     * @param predicate - a condition that will be used to determine in what sequence to iterate
+     * @return Iterator
+     * @param <T> - A type
+     */
     public <T> Iterator<T> iterator(Predicate<T> predicate) {
         return new TransportListIterator<>(this, predicate);
     }
@@ -286,13 +291,12 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public int lastIndexOf(Object o) {
-        int index = -1;
-        for (int i = 0; i < size; i++) {
+        for (int i = size - 1; i>=0; i--) {
             if (array[i].equals(o)) {
-                index = i;
+               return i;
             }
         }
-        return index;
+        return -1;
     }
 
     /**

@@ -3,7 +3,7 @@ package com.epam.transport;
 /**
  * Class Vehicle that contains fields and methods and extends class Transport.
  */
-public class Vehicle extends Transport {
+public abstract class Vehicle extends Transport {
     VehicleType vehicleType;
 
     public VehicleType getType() {

@@ -3,7 +3,7 @@ package com.epam.transport;
 /**
  * Class Transport that contains fields and methods to describe a Transport.
  */
-public class Transport {
+public abstract class Transport {
     private final int DEFAULT_MIN = 0;
 
     private int speed;
