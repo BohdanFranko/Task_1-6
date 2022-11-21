@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 /**
  * Class TransportList that implements and contains methods of List interface.
  */
-public class TransportList<T> implements List<T> {
+public class TransportList<T extends Transport> implements List<T> {
     private final static int INITIAL_CAPACITY = 5;
     private static int size;
     private static Object[] containerOfTransports;
