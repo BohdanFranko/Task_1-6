@@ -1,5 +1,6 @@
 package com.epam.container;
 
+import com.epam.exceptions.NotSupportedException;
 import com.epam.transport.Transport;
 
 import java.util.*;
@@ -12,16 +13,64 @@ public class TransportList implements List<Transport> {
 
     private final int NUMBER_OF_FIELDS = 4;
     private final static int INITIAL_CAPACITY = 5;
-    private int size;
-    Transport[] array;
+    private static int size;
+    private static Transport[] containerOfTransports;
 
     public TransportList() {
         this(INITIAL_CAPACITY);
     }
 
     public TransportList(int capacity) {
-        this.size = 0;
-        array = new Transport[capacity];
+        size = 0;
+        containerOfTransports = new Transport[capacity];
+    }
+
+    /**
+     * Class TransportListIterator that implements methods of Iterator interface.
+     */
+    private static class TransportListIterator<T> implements Iterator<T> {
+
+        private Predicate<T> predicate;
+        private int counter;
+
+        public TransportListIterator() {
+            counter = 0;
+        }
+
+        public TransportListIterator(Predicate<T> predicate) {
+            this();
+            this.predicate = predicate;
+        }
+
+
+        /**
+         * Returns true if the iteration has more elements
+         *
+         * @return true if the iteration has more elements
+         */
+        @Override
+        public boolean hasNext() {
+            if (counter >= size) {
+                return false;
+            }
+            while (predicate != null && !predicate.test((T) containerOfTransports[counter])) {
+                if (counter >= size) {
+                    return false;
+                }
+                counter++;
+            }
+            return true;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         */
+        @Override
+        public T next() {
+            return (T) containerOfTransports[counter++];
+        }
     }
 
     /**
@@ -54,31 +103,18 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public Iterator<Transport> iterator() {
-        return new Iterator<Transport>() {
-            int counter = 0;
-            @Override
-            public boolean hasNext() {
-                return counter < size;
-            }
-
-            @Override
-            public Transport next() {
-                if(!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                return array[counter++];
-            }
-        };
+        return new TransportListIterator<Transport>();
     }
 
     /**
      * Returns an iterator over the elements in specified by Predicate sequence
+     *
      * @param predicate - a condition that will be used to determine in what sequence to iterate
+     * @param <T>       - A type
      * @return Iterator
-     * @param <T> - A type
      */
     public <T> Iterator<T> iterator(Predicate<T> predicate) {
-        return new TransportListIterator<>(this, predicate);
+        return new TransportListIterator<>(predicate);
     }
 
     /**
@@ -86,9 +122,7 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public Object[] toArray() {
-        Transport[] resArray = new Transport[size];
-        System.arraycopy(array, 0, resArray, 0, size);
-        return resArray;
+        return Arrays.copyOf(containerOfTransports, size);
     }
 
     /**
@@ -109,7 +143,7 @@ public class TransportList implements List<Transport> {
     @Override
     public boolean add(Transport transport) {
         resize();
-        array[size++] = transport;
+        containerOfTransports[size++] = transport;
         return true;
     }
 
@@ -123,9 +157,9 @@ public class TransportList implements List<Transport> {
     public boolean remove(Object o) {
         int index = indexOf(o);
         if (index >= 0 && index < size) {
-            System.arraycopy(array, index + 1, array, index, size - index - 1);
+            System.arraycopy(containerOfTransports, index + 1, containerOfTransports, index, size - index - 1);
             size--;
-            array[size] = null;
+            containerOfTransports[size] = null;
             return true;
         }
         return false;
@@ -192,7 +226,7 @@ public class TransportList implements List<Transport> {
     public boolean retainAll(Collection<?> collection) {
         boolean changed = false;
         for (int i = size - 1; i >= 0; i--) {
-            if (!collection.contains(array[i])) {
+            if (!collection.contains(containerOfTransports[i])) {
                 remove(i);
                 changed = true;
             }
@@ -205,7 +239,7 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public void clear() {
-        array = new Transport[INITIAL_CAPACITY];
+        containerOfTransports = new Transport[INITIAL_CAPACITY];
         size = 0;
     }
 
@@ -218,7 +252,7 @@ public class TransportList implements List<Transport> {
     @Override
     public Transport get(int i) {
         if (i >= 0 && i < size) {
-            return array[i];
+            return containerOfTransports[i];
         } else throw new IndexOutOfBoundsException("Index must be within array's bounds");
     }
 
@@ -231,8 +265,8 @@ public class TransportList implements List<Transport> {
     @Override
     public Transport set(int i, Transport transport) {
         Objects.checkIndex(i, size);
-        array[i] = transport;
-        return array[i];
+        containerOfTransports[i] = transport;
+        return containerOfTransports[i];
     }
 
     /**
@@ -244,8 +278,8 @@ public class TransportList implements List<Transport> {
     @Override
     public void add(int i, Transport transport) {
         resize();
-        System.arraycopy(array, i, array, i + 1, size - i);
-        array[i] = transport;
+        System.arraycopy(containerOfTransports, i, containerOfTransports, i + 1, size - i);
+        containerOfTransports[i] = transport;
         size++;
     }
 
@@ -258,10 +292,10 @@ public class TransportList implements List<Transport> {
     @Override
     public Transport remove(int i) {
         if (i >= 0 && i < size) {
-            Transport resTransport = array[i];
-            System.arraycopy(array, i + 1, array, i, size - i - 1);
+            Transport resTransport = containerOfTransports[i];
+            System.arraycopy(containerOfTransports, i + 1, containerOfTransports, i, size - i - 1);
             size--;
-            array[size] = null;
+            containerOfTransports[size] = null;
             return resTransport;
         }
         return null;
@@ -276,7 +310,7 @@ public class TransportList implements List<Transport> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; i++) {
-            if (array[i].equals(o)) {
+            if (containerOfTransports[i].equals(o)) {
                 return i;
             }
         }
@@ -291,9 +325,9 @@ public class TransportList implements List<Transport> {
      */
     @Override
     public int lastIndexOf(Object o) {
-        for (int i = size - 1; i>=0; i--) {
-            if (array[i].equals(o)) {
-               return i;
+        for (int i = size - 1; i >= 0; i--) {
+            if (containerOfTransports[i].equals(o)) {
+                return i;
             }
         }
         return -1;
@@ -303,25 +337,51 @@ public class TransportList implements List<Transport> {
      * Returns an array containing all the elements with new length
      */
     private void resize() {
-        if (size == array.length) {
-            array = Arrays.copyOf(array, (size * 3) / 2 + 1);
+        if (size == containerOfTransports.length) {
+            containerOfTransports = Arrays.copyOf(containerOfTransports, (size * 3) / 2 + 1);
         }
     }
 
-    //NotSupported Exception
+    /**
+     * Throws NotSupportedException
+     *
+     * @return
+     */
     @Override
     public ListIterator<Transport> listIterator() {
-        return null;
+        try {
+            throw new NotSupportedException();
+        } catch (NotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    /**
+     * Throws NotSupportedException
+     *
+     * @return
+     */
     @Override
     public ListIterator<Transport> listIterator(int i) {
-        return null;
+        try {
+            throw new NotSupportedException();
+        } catch (NotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    /**
+     * Throws NotSupportedException
+     *
+     * @return
+     */
     @Override
     public List<Transport> subList(int i, int i1) {
-        return null;
+        try {
+            throw new NotSupportedException();
+        } catch (NotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
