@@ -2,106 +2,132 @@ package com.epam.container;
 
 
 import com.epam.transport.Automobile;
-import com.epam.transport.Transport;
 import com.epam.transport.VehicleType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContainerTest {
+    private static TransportList<Automobile> container;
+    private static List<Automobile> collectionContainer;
 
-    @Test
-    void testSet() {
-        TransportList container = new TransportList();
-        Automobile transport = new Automobile(200, 4, VehicleType.LAND, "Mazeratti");
-
-        container.add(transport);
-
-        Automobile changedTransport = new Automobile(50, 10, VehicleType.LAND, "Changed");
-        container.set(0, changedTransport);
-        assertEquals(changedTransport, container.get(0));
+    @BeforeAll
+    static void initializeContainer() {
+        container = new TransportList<>();
+        collectionContainer = new ArrayList<>();
     }
 
-    @Test
-    public void testAddAutomobile() {
-        TransportList container = new TransportList();
-        Automobile transport = new Automobile(200, 4, VehicleType.LAND, "Mazeratti");
-        container.add(transport);
-        assertEquals(transport, container.get(0));
+    @AfterEach
+    void clearContainer() {
+        container.clear();
+        collectionContainer.clear();
+    }
+
+    @ParameterizedTest
+    @MethodSource("getMazerattiAuto")
+    void setShouldChangeElement(Automobile auto) {
+        container.add(auto);
+
+        Automobile changedToTransport = new Automobile(50, 10, VehicleType.LAND, "Changed");
+
+        container.set(0, changedToTransport);
+
+        assertEquals(changedToTransport, container.get(0));
+    }
+
+    @ParameterizedTest
+    @MethodSource("getMazerattiAuto")
+    public void addElement(Automobile auto) {
+        container.add(auto);
+
+        assertEquals(auto, container.get(0));
     }
 
 
-    @org.junit.jupiter.api.Test
-    void testAddAutomobileByIndex() {
-        TransportList container = new TransportList();
-        Automobile transport = new Automobile(200, 4, VehicleType.LAND, "Mazeratti");
-        container.add(transport);
-        container.add(transport);
-        container.add(transport);
+    @ParameterizedTest
+    @MethodSource("getMazerattiAuto")
+    void addElementByIndex(Automobile auto) {
+        container.add(auto);
+        container.add(auto);
+        container.add(auto);
+
         Automobile testAuto = new Automobile(200, 4, VehicleType.LAND, "TestInsert");
+
         container.add(1, testAuto);
+
         assertEquals(container.get(1), testAuto);
     }
 
-    @org.junit.jupiter.api.Test
-    void testRemoveAutomobile() {
-        TransportList container = new TransportList();
-        Automobile transport = new Automobile(200, 4, VehicleType.LAND, "Mazeratti");
-        container.add(transport);
-        assertTrue(container.remove(transport));
+    @ParameterizedTest
+    @MethodSource("getMazerattiAuto")
+    void removeElement(Automobile auto) {
+        container.add(auto);
+
+        assertTrue(container.remove(auto));
     }
 
-    @org.junit.jupiter.api.Test
-    void testRemoveByIndex() {
-        TransportList container = new TransportList();
-        container.add(new Automobile(200, 4, VehicleType.LAND, "Mazeratti"));
-        container.add(new Automobile(200, 4, VehicleType.LAND, "Lexus"));
-        container.add(new Automobile(200, 4, VehicleType.LAND, "Lada"));
-        container.remove(1);
-        assertEquals(container.get(1), new Automobile(200, 4, VehicleType.LAND, "Lada"));
+    @ParameterizedTest
+    @MethodSource("getMazerattiAuto")
+    void removeElementByIndex(Automobile auto) {
+        container.add(auto);
+
+        assertEquals(auto, container.remove(0));
     }
 
-    @org.junit.jupiter.api.Test
-    void testGetAutomobile() {
-        TransportList container = new TransportList();
-        Automobile transport = new Automobile(200, 4, VehicleType.LAND, "Mazeratti");
-        container.add(transport);
-        Automobile takenAutomobile = (Automobile) container.get(0);
-        assertEquals(transport, takenAutomobile);
+    @ParameterizedTest
+    @MethodSource("getMazerattiAuto")
+    void getElementIfExists(Automobile auto) {
+        container.add(auto);
+
+        assertEquals(auto, container.get(0));
     }
 
     @Test
-    void testisEmptyShouldReturnTrue() {
-        TransportList container = new TransportList();
+    void getElementIfDoesNotExist_ShouldThrowIndexOutOfBounds() throws IndexOutOfBoundsException {
+        assertThrows(IndexOutOfBoundsException.class, () -> container.get(0));
+    }
+
+    private static Stream<Arguments> getMazerattiAuto() {
+        return Stream.of(Arguments.of(new Automobile(200, 4, VehicleType.LAND, "Mazeratti")));
+    }
+
+    @Test
+    void isEmptyShouldReturnTrue() {
         assertTrue(container.isEmpty());
     }
 
-    @Test
-    void testContainsAutomobileThatExists() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void containsElementThatExists(Automobile auto) {
         container.add(auto);
+
         assertTrue(container.contains(auto));
     }
 
-    @Test
-    void testContainsAutomobileThatDoesNotExist() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void containsElementThatDoesNotExist(Automobile auto) {
         assertFalse(container.contains(auto));
     }
 
-    @Test
-    void testToArrayWithoutGenerics() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void toArrayWithoutGenerics(Automobile auto) {
         container.add(auto);
         container.add(auto);
         container.add(auto);
-        Transport[] testArrayExpected = new Transport[3];
+
+        Automobile[] testArrayExpected = new Automobile[3];
+
         testArrayExpected[0] = auto;
         testArrayExpected[1] = auto;
         testArrayExpected[2] = auto;
@@ -118,19 +144,20 @@ class ContainerTest {
         assertTrue(equals);
     }
 
-    @Test
-    void testToArrayWithGenerics() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void toArrayWithGenericsNewSizeEqualsOldSize(Automobile auto) {
         container.add(auto);
         container.add(auto);
         container.add(auto);
-        Transport[] testArrayExpected = new Transport[3];
+
+        Automobile[] testArrayExpected = new Automobile[3];
+
         testArrayExpected[0] = auto;
         testArrayExpected[1] = auto;
         testArrayExpected[2] = auto;
 
-        Object[] testArrayActual = container.toArray(container.toArray());
+        Object[] testArrayActual = container.toArray(new Automobile[3]);
 
         boolean equals = true;
         for (int i = 0; i < 3; i++) {
@@ -142,115 +169,190 @@ class ContainerTest {
         assertTrue(equals);
     }
 
-    @Test
-    void testContainsAllElementsFromCollectionShouldReturnTrue() {
-        List<Transport> containedTransport = new ArrayList<>();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void toArrayWithGenericsNewSizeBiggerThanOldSize(Automobile auto) {
+        container.add(auto);
+        container.add(auto);
+        container.add(auto);
 
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
+        Automobile[] testArrayExpected = new Automobile[3];
 
-        containedTransport.add(auto);
-        TransportList container = new TransportList();
+        testArrayExpected[0] = auto;
+        testArrayExpected[1] = auto;
+        testArrayExpected[2] = auto;
+
+        Object[] testArrayActual = container.toArray(new Automobile[100]);
+
+        boolean equals = true;
+        for (int i = 0; i < 3; i++) {
+            if (testArrayExpected[i] != testArrayActual[i]) {
+                equals = false;
+                break;
+            }
+        }
+        assertTrue(equals);
+    }
+
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void toArrayWithGenericsNewSizeSmallerThanOldSize(Automobile auto) {
+        container.add(auto);
+        container.add(auto);
+        container.add(auto);
+
+        Automobile[] testArrayExpected = new Automobile[3];
+
+        testArrayExpected[0] = auto;
+        testArrayExpected[1] = auto;
+        testArrayExpected[2] = auto;
+
+        Object[] testArrayActual = container.toArray(new Automobile[0]);
+
+        boolean equals = true;
+        for (int i = 0; i < 3; i++) {
+            if (testArrayExpected[i] != testArrayActual[i]) {
+                equals = false;
+                break;
+            }
+        }
+        assertTrue(equals);
+    }
+
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void containsAllElementsFromCollectionShouldReturnTrue(Automobile auto) {
+        collectionContainer.add(auto);
 
         container.add(auto);
         container.add(auto);
         container.add(auto);
 
         auto = new Automobile(1500, 100, VehicleType.LAND, "Sedan");
-        container.add(auto);
-        containedTransport.add(auto);
 
-        assertTrue(container.containsAll(containedTransport));
+        container.add(auto);
+
+        collectionContainer.add(auto);
+
+        assertTrue(container.containsAll(collectionContainer));
     }
 
-    @Test
-    void testAddAllElementsFromCollectionToTheEndOfList() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void addAllElementsFromCollectionToTheEndOfList(Automobile auto) {
         container.add(auto);
         container.add(auto);
 
-        List<Transport> containedTransport = new ArrayList<>();
-        Transport firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
-        Transport secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
-        containedTransport.add(firstInsertedAuto);
-        containedTransport.add(secondInsertedAuto);
+        Automobile firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
+        Automobile secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
 
-        container.addAll(containedTransport);
+        collectionContainer.add(firstInsertedAuto);
+        collectionContainer.add(secondInsertedAuto);
+
+        container.addAll(collectionContainer);
 
         assertEquals(firstInsertedAuto, container.get(2));
         assertEquals(secondInsertedAuto, container.get(3));
 
     }
 
-    @Test
-    void testAddAllElementsFromCollectionByIndex() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void addAllElementsFromCollectionByIndexAtTheBeginning(Automobile auto) {
         container.add(auto);
         container.add(auto);
 
-        List<Transport> containedTransport = new ArrayList<>();
+        Automobile firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
+        Automobile secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
 
-        Transport firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
-        Transport secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
+        collectionContainer.add(firstInsertedAuto);
+        collectionContainer.add(secondInsertedAuto);
 
-        containedTransport.add(firstInsertedAuto);
-        containedTransport.add(secondInsertedAuto);
-
-        container.addAll(0, containedTransport);
+        container.addAll(0, collectionContainer);
 
         assertEquals(firstInsertedAuto, container.get(0));
         assertEquals(secondInsertedAuto, container.get(1));
     }
 
-    @Test
-    void testRemoveAllElementsFromCollection() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void addAllElementsFromCollectionByIndexInBetween(Automobile auto) {
         container.add(auto);
-        List<Transport> containedTransport = new ArrayList<>();
+        container.add(auto);
+        container.add(auto);
 
-        Transport firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
-        Transport secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
+        Automobile firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
+        Automobile secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
+
+        collectionContainer.add(firstInsertedAuto);
+        collectionContainer.add(secondInsertedAuto);
+
+        container.addAll(1, collectionContainer);
+
+        assertEquals(firstInsertedAuto, container.get(1));
+        assertEquals(secondInsertedAuto, container.get(2));
+    }
+
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void addAllElementsFromCollectionByIndexAtTheEnd(Automobile auto) {
+        container.add(auto);
+        container.add(auto);
+
+        Automobile firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
+        Automobile secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
+
+        collectionContainer.add(firstInsertedAuto);
+        collectionContainer.add(secondInsertedAuto);
+
+        container.addAll(2, collectionContainer);
+
+        assertEquals(firstInsertedAuto, container.get(2));
+        assertEquals(secondInsertedAuto, container.get(3));
+    }
+
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void removeAllElementsFromCollection(Automobile auto) {
+        container.add(auto);
+
+        Automobile firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
+        Automobile secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
 
         container.add(firstInsertedAuto);
         container.add(secondInsertedAuto);
 
-        containedTransport.add(firstInsertedAuto);
-        containedTransport.add(secondInsertedAuto);
+        collectionContainer.add(firstInsertedAuto);
+        collectionContainer.add(secondInsertedAuto);
 
-        container.removeAll(containedTransport);
+        container.removeAll(collectionContainer);
 
         assertEquals(1, container.size());
         assertEquals(auto, container.get(0));
     }
 
-    @Test
-    void testRetainAllElementsFromCollection() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-        TransportList container = new TransportList();
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void retainAllElementsFromCollection(Automobile auto) {
         container.add(auto);
-        List<Transport> containedTransport = new ArrayList<>();
-        Transport firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
-        Transport secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
+
+        Automobile firstInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_1");
+        Automobile secondInsertedAuto = new Automobile(100, 100, VehicleType.LAND, "TestInsert_2");
 
         container.add(firstInsertedAuto);
 
-        containedTransport.add(firstInsertedAuto);
-        containedTransport.add(secondInsertedAuto);
+        collectionContainer.add(firstInsertedAuto);
+        collectionContainer.add(secondInsertedAuto);
 
-        container.retainAll(containedTransport);
+        container.retainAll(collectionContainer);
 
         assertEquals(1, container.size());
         assertEquals(firstInsertedAuto, container.get(0));
     }
 
-    @Test
-    void testClear() {
-        Transport auto = new Automobile(100, 100, VehicleType.LAND, "Lada");
-
-        TransportList container = new TransportList();
-
+    @ParameterizedTest
+    @MethodSource("getLadaAuto")
+    void clearShouldReturnTrue(Automobile auto) {
         container.add(auto);
         container.add(auto);
         container.add(auto);
@@ -260,36 +362,34 @@ class ContainerTest {
         assertEquals(0, container.size());
     }
 
-    @Test
-    void testIndexOfElementExists() {
-        TransportList container = new TransportList();
+    private static Stream<Arguments> getLadaAuto() {
+        return Stream.of(Arguments.of(new Automobile(100, 100, VehicleType.LAND, "Lada")));
+    }
 
-        Automobile auto = new Automobile(10,10,VehicleType.LAND, "Exists");
+
+    @Test
+    void indexOfElementExists() {
+        Automobile auto = new Automobile(10, 10, VehicleType.LAND, "Exists");
 
         container.add(auto);
 
         assertEquals(0, container.indexOf(auto));
-
     }
 
     @Test
-    void testIndexOfElementDoesNotExist() {
-        TransportList container = new TransportList();
-
-        Automobile auto = new Automobile(10,10,VehicleType.LAND, "Exists");
+    void indexOfElementDoesNotExist() {
+        Automobile auto = new Automobile(10, 10, VehicleType.LAND, "Exists");
 
         container.add(auto);
 
-        Automobile nonExistentAuto = new Automobile(1,1,VehicleType.LAND,"Doesn't");
+        Automobile nonExistentAuto = new Automobile(1, 1, VehicleType.LAND, "Doesn't");
 
         assertEquals(-1, container.indexOf(nonExistentAuto));
     }
 
     @Test
-    void testLastIndexOfElementExists() {
-        TransportList container = new TransportList();
-
-        Automobile auto = new Automobile(10,10,VehicleType.LAND, "Exists");
+    void lastIndexOfElementExists() {
+        Automobile auto = new Automobile(10, 10, VehicleType.LAND, "Exists");
 
         container.add(auto);
         container.add(auto);
@@ -298,18 +398,15 @@ class ContainerTest {
 
 
         assertEquals(3, container.lastIndexOf(auto));
-
     }
 
     @Test
-    void testLastIndexOfElementDoesNotExist() {
-        TransportList container = new TransportList();
-
-        Automobile auto = new Automobile(10,10,VehicleType.LAND, "Exists");
+    void lastIndexOfElementDoesNotExist() {
+        Automobile auto = new Automobile(10, 10, VehicleType.LAND, "Exists");
 
         container.add(auto);
 
-        Automobile nonExistentAuto = new Automobile(1,1,VehicleType.LAND,"Doesn't");
+        Automobile nonExistentAuto = new Automobile(1, 1, VehicleType.LAND, "Doesn't");
 
         assertEquals(-1, container.lastIndexOf(nonExistentAuto));
     }

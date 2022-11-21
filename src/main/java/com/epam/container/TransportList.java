@@ -9,12 +9,10 @@ import java.util.function.Predicate;
 /**
  * Class TransportList that implements and contains methods of List interface.
  */
-public class TransportList implements List<Transport> {
-
-    private final int NUMBER_OF_FIELDS = 4;
+public class TransportList<T> implements List<T> {
     private final static int INITIAL_CAPACITY = 5;
     private static int size;
-    private static Transport[] containerOfTransports;
+    private static Object[] containerOfTransports;
 
     public TransportList() {
         this(INITIAL_CAPACITY);
@@ -22,13 +20,13 @@ public class TransportList implements List<Transport> {
 
     public TransportList(int capacity) {
         size = 0;
-        containerOfTransports = new Transport[capacity];
+        containerOfTransports = new Object[capacity];
     }
 
     /**
      * Class TransportListIterator that implements methods of Iterator interface.
      */
-    private class TransportListIterator<T> implements Iterator<T> {
+    private static class TransportListIterator<T> implements Iterator<T> {
 
         private Predicate<T> predicate;
         private int counter;
@@ -102,18 +100,17 @@ public class TransportList implements List<Transport> {
      * Returns an iterator over the elements in this list in proper sequence.
      */
     @Override
-    public Iterator<Transport> iterator() {
-        return new TransportListIterator<Transport>();
+    public Iterator<T> iterator() {
+        return new TransportListIterator<T>();
     }
 
     /**
      * Returns an iterator over the elements in specified by Predicate sequence
      *
      * @param predicate - a condition that will be used to determine in what sequence to iterate
-     * @param <T>       - A type
      * @return Iterator
      */
-    public <T> Iterator<T> iterator(Predicate<T> predicate) {
+    public Iterator<T> iterator(Predicate<T> predicate) {
         return new TransportListIterator<>(predicate);
     }
 
@@ -126,12 +123,19 @@ public class TransportList implements List<Transport> {
     }
 
     /**
-     * Returns an array containing all the elements in this list in proper sequence (from first to last element);
-     * the runtime type of the returned array is that of the specified array.
+     * Returns an array containing all the elements in this list in proper sequence
+     *
+     * @param t1s  - the array into which the elements of this list are to be stored, if it is big enough
+     * @param <T1> - the runtime type of the array to contain the collection
+     * @return an array containing the elements of this list
      */
     @Override
-    public <T> T[] toArray(T[] ts) {
-        return Arrays.copyOf(ts, size);
+    public <T1> T1[] toArray(T1[] t1s) {
+        if (t1s.length < size) {
+            t1s = Arrays.copyOf(t1s, size);
+        }
+        System.arraycopy(containerOfTransports, 0, t1s, 0, size);
+        return t1s;
     }
 
     /**
@@ -141,7 +145,7 @@ public class TransportList implements List<Transport> {
      * @return true (as specified by Collection.add(E))
      */
     @Override
-    public boolean add(Transport transport) {
+    public boolean add(T transport) {
         resize();
         containerOfTransports[size++] = transport;
         return true;
@@ -186,7 +190,7 @@ public class TransportList implements List<Transport> {
      * @return true if this list changed as a result of the call
      */
     @Override
-    public boolean addAll(Collection<? extends Transport> collection) {
+    public boolean addAll(Collection<? extends T> collection) {
         collection.forEach(this::add);
         return true;
     }
@@ -197,9 +201,11 @@ public class TransportList implements List<Transport> {
      * @return true if this list changed as a result of the call
      */
     @Override
-    public boolean addAll(int i, Collection<? extends Transport> collection) {
-        for (Transport transport : collection) {
-            add(i++,transport);
+    public boolean addAll(int i, Collection<? extends T> collection) {
+        System.arraycopy(containerOfTransports, i + 1, containerOfTransports, i, size - i - 1 + collection.size());
+        size += collection.size();
+        for (T transport : collection) {
+            containerOfTransports[i++] = transport;
         }
         return true;
     }
@@ -252,9 +258,9 @@ public class TransportList implements List<Transport> {
      * @return the element at the specified position in this list
      */
     @Override
-    public Transport get(int i) {
+    public T get(int i) {
         if (i >= 0 && i < size) {
-            return containerOfTransports[i];
+            return (T) containerOfTransports[i];
         } else throw new IndexOutOfBoundsException("Index must be within array's bounds");
     }
 
@@ -265,10 +271,10 @@ public class TransportList implements List<Transport> {
      * @param transport - element to be stored at the specified position
      */
     @Override
-    public Transport set(int i, Transport transport) {
+    public T set(int i, T transport) {
         Objects.checkIndex(i, size);
         containerOfTransports[i] = transport;
-        return containerOfTransports[i];
+        return (T) containerOfTransports[i];
     }
 
     /**
@@ -278,7 +284,7 @@ public class TransportList implements List<Transport> {
      * @param transport -  element to be inserted
      */
     @Override
-    public void add(int i, Transport transport) {
+    public void add(int i, T transport) {
         resize();
         System.arraycopy(containerOfTransports, i, containerOfTransports, i + 1, size - i);
         containerOfTransports[i] = transport;
@@ -292,9 +298,9 @@ public class TransportList implements List<Transport> {
      * @return the element previously at the specified position
      */
     @Override
-    public Transport remove(int i) {
+    public T remove(int i) {
         if (i >= 0 && i < size) {
-            Transport resTransport = containerOfTransports[i];
+            T resTransport = (T) containerOfTransports[i];
             System.arraycopy(containerOfTransports, i + 1, containerOfTransports, i, size - i - 1);
             size--;
             containerOfTransports[size] = null;
@@ -350,7 +356,7 @@ public class TransportList implements List<Transport> {
      * @return
      */
     @Override
-    public ListIterator<Transport> listIterator() {
+    public ListIterator<T> listIterator() {
         try {
             throw new NotSupportedException();
         } catch (NotSupportedException e) {
@@ -364,7 +370,7 @@ public class TransportList implements List<Transport> {
      * @return
      */
     @Override
-    public ListIterator<Transport> listIterator(int i) {
+    public ListIterator<T> listIterator(int i) {
         try {
             throw new NotSupportedException();
         } catch (NotSupportedException e) {
@@ -378,7 +384,7 @@ public class TransportList implements List<Transport> {
      * @return
      */
     @Override
-    public List<Transport> subList(int i, int i1) {
+    public List<T> subList(int i, int i1) {
         try {
             throw new NotSupportedException();
         } catch (NotSupportedException e) {
