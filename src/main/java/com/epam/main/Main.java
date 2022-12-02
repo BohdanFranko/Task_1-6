@@ -45,6 +45,13 @@ public class Main {
         printMap(hashMapByLength, hashMapBySum);
         System.out.println("-------------------LinkedHashMap-------------------------");
         printMap(linkedHashMapByLength, linkedHashMapBySum);
+        System.out.println("------------------TestStrings-----------------");
+        MyStringHashIsSumOfChar checkSum = new MyStringHashIsSumOfChar("!");
+        MyStringHashIsLength checkLength = new MyStringHashIsLength("F".repeat('!'));
+        System.out.println(checkLength);
+        System.out.println(checkSum);
+        System.out.println(checkLength.hashCode() == checkSum.hashCode());
+        System.out.print(checkLength.equals(checkSum));
     }
 
     private static void printMap(HashMap<MyStringHashIsLength, Automobile> hashMapByLength, HashMap<MyStringHashIsSumOfChar, Automobile> hashMapBySum) {
