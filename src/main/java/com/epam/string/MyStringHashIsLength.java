@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Class MyString contains class String and overrides methods equals and hashCode
  */
-public class MyString {
+public class MyStringHashIsLength {
     private String underString;
 
     public String getUnderString() {
@@ -16,7 +16,7 @@ public class MyString {
         this.underString = underString;
     }
 
-    public MyString(String underString) {
+    public MyStringHashIsLength(String underString) {
         setUnderString(underString);
     }
 
@@ -24,7 +24,7 @@ public class MyString {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MyString myString = (MyString) o;
+        MyStringHashIsLength myString = (MyStringHashIsLength) o;
         return Objects.equals(underString, myString.underString);
     }
 
@@ -35,15 +35,9 @@ public class MyString {
      */
     @Override
     public int hashCode() {
-        int numOfCharacters = 4;
-        if (underString == null) {
-            return 0;
-        }
-        int hash = underString.length();
-        for (int i = 0; i < Math.min(underString.length(), numOfCharacters); i++) {
-            hash += underString.charAt(i);
-        }
-        return hash;
+        if (underString != null) {
+            return underString.length();
+        } else return -1;
     }
 
     @Override
