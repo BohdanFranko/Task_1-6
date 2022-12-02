@@ -14,6 +14,15 @@ class MyStringHashIsLengthTest {
     }
 
     @Test
+    void equals_ReturnsFalse_SameHashNotEquals() {
+        MyStringHashIsLength firstString = new MyStringHashIsLength(new String("He123"));
+        MyStringHashIsLength secondString = new MyStringHashIsLength(new String("Hello"));
+
+        assertEquals(firstString.hashCode(), secondString. hashCode());
+        assertNotEquals(firstString, secondString);
+    }
+
+    @Test
     void hashCode_ReturnsCorrectHashCode() {
         MyStringHashIsLength myString = new MyStringHashIsLength("Check");
 

@@ -3,6 +3,7 @@ package com.epam.string;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class MyStringHashIsSumOfCharTest {
     @Test
@@ -11,6 +12,15 @@ class MyStringHashIsSumOfCharTest {
         MyStringHashIsSumOfChar secondString = new MyStringHashIsSumOfChar(new String("Hello"));
 
         assertEquals(firstString, secondString);
+    }
+
+    @Test
+    void equals_ReturnsFalse_SameHashNotEquals() {
+        MyStringHashIsSumOfChar firstString = new MyStringHashIsSumOfChar(new String("!2"));
+        MyStringHashIsSumOfChar secondString = new MyStringHashIsSumOfChar(new String("2!"));
+
+        assertEquals(firstString.hashCode(), secondString.hashCode());
+        assertNotEquals(firstString, secondString);
     }
 
     @Test
