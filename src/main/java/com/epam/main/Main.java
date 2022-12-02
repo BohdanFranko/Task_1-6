@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        MyStringHashIsLength firstLength = new MyStringHashIsLength(new String("First"));
-        MyStringHashIsSumOfChar firstSum = new MyStringHashIsSumOfChar(new String("First"));
-        MyStringHashIsLength secondLength = new MyStringHashIsLength(new String("Second"));
-        MyStringHashIsSumOfChar secondSum = new MyStringHashIsSumOfChar(new String("Second"));
-        MyStringHashIsLength thirdLength = new MyStringHashIsLength(new String("Third"));
-        MyStringHashIsSumOfChar thirdSum = new MyStringHashIsSumOfChar(new String("Third"));
+        MyStringHashIsLength firstLength = new MyStringHashIsLength("First");
+        MyStringHashIsSumOfChar firstSum = new MyStringHashIsSumOfChar("First");
+        MyStringHashIsLength secondLength = new MyStringHashIsLength("Second");
+        MyStringHashIsSumOfChar secondSum = new MyStringHashIsSumOfChar("Second");
+        MyStringHashIsLength thirdLength = new MyStringHashIsLength("Third");
+        MyStringHashIsSumOfChar thirdSum = new MyStringHashIsSumOfChar("Third");
 
         Automobile maserati = new Automobile(200, 4, VehicleType.LAND, "Mazeratti");
         Automobile sedan = new Automobile(1500, 100, VehicleType.LAND, "Sedan");
@@ -46,12 +46,16 @@ public class Main {
         System.out.println("-------------------LinkedHashMap-------------------------");
         printMap(linkedHashMapByLength, linkedHashMapBySum);
         System.out.println("------------------TestStrings-----------------");
-        MyStringHashIsSumOfChar checkSum = new MyStringHashIsSumOfChar("!");
-        MyStringHashIsLength checkLength = new MyStringHashIsLength("F".repeat('!'));
-        System.out.println(checkLength);
-        System.out.println(checkSum);
-        System.out.println(checkLength.hashCode() == checkSum.hashCode());
-        System.out.print(checkLength.equals(checkSum));
+        MyStringHashIsSumOfChar checkSum = new MyStringHashIsSumOfChar("!fdsa");
+        System.out.println("CharSum1 = " + ('!' + 'f' + 'd' + 's'));
+        MyStringHashIsSumOfChar checkSum1 = new MyStringHashIsSumOfChar("f[j34");
+        System.out.println("CharSum2 = " + ('f' + '[' + 'j' + '3'));
+        System.out.println(checkSum.hashCode() == checkSum1.hashCode());
+        System.out.println(checkSum.equals(checkSum1));
+        MyStringHashIsLength checkLength = new MyStringHashIsLength("58437");
+        MyStringHashIsLength checkLength1= new MyStringHashIsLength("58f37");
+        System.out.println(checkLength.hashCode() == checkLength1.hashCode());
+        System.out.println(checkLength.equals(checkLength1));
     }
 
     private static void printMap(HashMap<MyStringHashIsLength, Automobile> hashMapByLength, HashMap<MyStringHashIsSumOfChar, Automobile> hashMapBySum) {
