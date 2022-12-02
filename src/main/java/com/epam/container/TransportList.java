@@ -14,6 +14,14 @@ public class TransportList<T extends Transport> implements List<T> {
     private static int size;
     private static Object[] containerOfTransports;
 
+    public static int getSize() {
+        return size;
+    }
+
+    public static Object[] getContainerOfTransports() {
+        return containerOfTransports;
+    }
+
     public TransportList() {
         this(INITIAL_CAPACITY);
     }
