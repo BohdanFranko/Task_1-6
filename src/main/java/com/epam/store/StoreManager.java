@@ -1,4 +1,4 @@
-package com.epam.container.store;
+package com.epam.store;
 
 import com.epam.good.Good;
 

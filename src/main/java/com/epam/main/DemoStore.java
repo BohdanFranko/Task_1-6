@@ -1,7 +1,7 @@
 package com.epam.main;
 
-import com.epam.container.store.StoreManager;
-import com.epam.container.validator.DateValidator;
+import com.epam.store.StoreManager;
+import com.epam.validator.DateValidator;
 import com.epam.good.Good;
 
 import java.util.*;

@@ -1,4 +1,4 @@
-package com.epam.container.validator;
+package com.epam.validator;
 
 import java.util.Calendar;
 
