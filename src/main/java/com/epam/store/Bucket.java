@@ -17,7 +17,7 @@ public class Bucket {
     }
 
     public boolean add(int productId, ListOfGoods list) {
-        if(!list.checkId(productId)) {
+        if (!list.checkId(productId)) {
             System.out.println("A product with that id doesn't exist");
             return false;
         }
@@ -44,6 +44,14 @@ public class Bucket {
             }
         }
         return sum;
+    }
+
+    public HashMap<Automobile, Integer> automobileIntegerHashMap(ListOfGoods list) {
+        HashMap<Automobile, Integer> hashMap = new HashMap<>();
+        for (Map.Entry<Integer, Integer> integerIntegerEntry : container.entrySet()) {
+            hashMap.put(list.getAutoById(integerIntegerEntry.getKey()), integerIntegerEntry.getValue());
+        }
+        return hashMap;
     }
 
     public void clear() {

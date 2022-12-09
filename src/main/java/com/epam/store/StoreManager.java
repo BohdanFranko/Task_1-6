@@ -33,7 +33,7 @@ public class StoreManager {
 
     public int buyAllFromBucket() {
         int totalPrice = bucket.totalPrice(goods);
-        orders.add(LocalDateTime.now(), new HashMap<>(bucket.getContainer()));
+        orders.add(LocalDateTime.now(), new HashMap<>(bucket.automobileIntegerHashMap(goods)));
         bucket.clear();
         return totalPrice;
     }

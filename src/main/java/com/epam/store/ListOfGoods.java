@@ -33,6 +33,15 @@ public class ListOfGoods {
         return false;
     }
 
+    public Automobile getAutoById(int productId) {
+        for (Automobile good : goods) {
+            if (good.getId() == productId) {
+                return good;
+            }
+        }
+        return null;
+    }
+
     public void print() {
         System.out.println("------------Goods------------");
         goods.forEach(System.out::println);

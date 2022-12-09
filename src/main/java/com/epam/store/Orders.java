@@ -1,5 +1,7 @@
 package com.epam.store;
 
+import com.epam.transport.Automobile;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -7,13 +9,13 @@ import java.util.*;
 
 public class Orders {
 
-    private TreeMap<LocalDateTime, HashMap<Integer, Integer>> container;
+    private TreeMap<LocalDateTime, HashMap<Automobile, Integer>> container;
 
     public Orders() {
         container = new TreeMap<>();
     }
 
-    public boolean add(LocalDateTime date, HashMap<Integer, Integer> list) {
+    public boolean add(LocalDateTime date, HashMap<Automobile, Integer> list) {
         container.put(date, list);
         return true;
     }
@@ -25,7 +27,7 @@ public class Orders {
 
     public void printInDateRange(LocalDateTime date1, LocalDateTime date2) {
         System.out.println("------------From Date1 to Date2------------");
-        for (Map.Entry<LocalDateTime, HashMap<Integer, Integer>> localDateTimeHashMapEntry : container.entrySet()) {
+        for (Map.Entry<LocalDateTime, HashMap<Automobile, Integer>> localDateTimeHashMapEntry : container.entrySet()) {
             LocalDateTime tempDate = localDateTimeHashMapEntry.getKey();
             if ((tempDate.isAfter(date1) || tempDate.isEqual(date1)) && (tempDate.isEqual(date2) || tempDate.isBefore(date2))) {
                 printOrderToString(tempDate, localDateTimeHashMapEntry.getValue());
@@ -37,8 +39,8 @@ public class Orders {
         System.out.println("------------Closest Order to Date------------");
         long dif = Long.MAX_VALUE;
         LocalDateTime answerDate = null;
-        HashMap<Integer, Integer> answerHash = null;
-        for (Map.Entry<LocalDateTime, HashMap<Integer, Integer>> localDateTimeHashMapEntry : container.entrySet()) {
+        HashMap<Automobile, Integer> answerHash = null;
+        for (Map.Entry<LocalDateTime, HashMap<Automobile, Integer>> localDateTimeHashMapEntry : container.entrySet()) {
             long tempDif = Math.abs(date.toEpochSecond(ZoneOffset.UTC) - localDateTimeHashMapEntry.getKey().toEpochSecond(ZoneOffset.UTC));
             if (tempDif < dif) {
                 dif = tempDif;
@@ -49,14 +51,14 @@ public class Orders {
         printOrderToString(answerDate, answerHash);
     }
 
-    private void printOrderToString(LocalDateTime date, HashMap<Integer, Integer> hashMap) {
+    private void printOrderToString(LocalDateTime date, HashMap<Automobile, Integer> hashMap) {
         System.out.println("Date = " + date + "\nGoods :\n" + hashToString(hashMap));
         System.out.println("-----------------------------------------");
     }
 
-    private String hashToString(HashMap<Integer, Integer> hashMap) {
+    private String hashToString(HashMap<Automobile, Integer> hashMap) {
         StringBuilder stringBuilder = new StringBuilder();
-        hashMap.forEach((key, value) -> stringBuilder.append("Product ID = ").append(key).append(" Amount = ").append(value).append('\n'));
+        hashMap.forEach((key, value) -> stringBuilder.append(key).append(" Amount = ").append(value).append('\n'));
         return stringBuilder.toString().strip();
     }
 
