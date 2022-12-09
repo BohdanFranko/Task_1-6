@@ -22,7 +22,17 @@ public class DemoStore {
         int switcher = -1;
 
         while (switcher != 0) {
-            storeManager.printInfo();
+            System.out.println("--------------------------------------------------");
+            System.out.println("Enter 1 to print all goods");
+            System.out.println("Enter 2 to add good to the bucket by ID");
+            System.out.println("Enter 3 to print your current bucket");
+            System.out.println("Enter 4 to buy all goods from your current bucket");
+            System.out.println("Enter 5 to print five last good added to bucket");
+            System.out.println("Enter 6 to print all orders");
+            System.out.println("Enter 7 to print all orders from Date1 to Date2");
+            System.out.println("Enter 8 to print the order with the closest Date");
+            System.out.println("Enter 0 to exit program");
+            System.out.println("--------------------------------------------------");
             switcher = scanner.nextInt();
             int index = -1;
             int year;

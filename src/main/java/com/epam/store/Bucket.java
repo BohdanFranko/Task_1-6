@@ -16,7 +16,11 @@ public class Bucket {
         container = new HashMap<>();
     }
 
-    public boolean add(int productId) {
+    public boolean add(int productId, ListOfGoods list) {
+        if(!list.checkId(productId)) {
+            System.out.println("A product with that id doesn't exist");
+            return false;
+        }
         if (container.containsKey(productId)) {
             container.put(productId, container.get(productId) + 1);
         } else {

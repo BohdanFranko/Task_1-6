@@ -23,6 +23,16 @@ public class ListOfGoods {
     public boolean add(Automobile automobile) {
         return goods.add(automobile);
     }
+
+    public boolean checkId(int productId) {
+        for (Automobile good : goods) {
+            if (good.getId() == productId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void print() {
         System.out.println("------------Goods------------");
         goods.forEach(System.out::println);
