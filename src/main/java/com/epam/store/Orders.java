@@ -58,7 +58,10 @@ public class Orders {
 
     private String hashToString(HashMap<Automobile, Integer> hashMap) {
         StringBuilder stringBuilder = new StringBuilder();
-        hashMap.forEach((key, value) -> stringBuilder.append(key).append(" Amount = ").append(value).append('\n'));
+        hashMap.forEach((key, value) -> stringBuilder.append("Brande = ").append(key.getBrand())
+                .append(", Speed = ").append(key.getSpeed())
+                .append(", Price = ").append(key.getPrice())
+                .append(", Amount = ").append(value).append('\n'));
         return stringBuilder.toString().strip();
     }
 
