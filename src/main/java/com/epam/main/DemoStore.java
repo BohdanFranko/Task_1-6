@@ -1,12 +1,12 @@
 package com.epam.main;
 
+import com.epam.command.store.StoreCommandFactory;
+import com.epam.command.store.StoreCommandName;
 import com.epam.store.StoreManager;
 import com.epam.transport.Automobile;
 import com.epam.transport.VehicleType;
-import com.epam.validator.DateValidator;
 import com.epam.validator.SwitcherValidator;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class DemoStore {
@@ -19,7 +19,8 @@ public class DemoStore {
 
         Scanner scanner = new Scanner(System.in);
 
-        DateValidator dateValidator = new DateValidator();
+        StoreCommandFactory commandFactory = StoreCommandFactory.getInstance();
+
         SwitcherValidator switcherValidator = new SwitcherValidator();
         String switcher = "a";
         while (!switcher.equals("0")) {
@@ -40,138 +41,15 @@ public class DemoStore {
                     System.out.println("Must be a number from 0 to 9");
                 }
             } while (!switcherValidator.validate(switcher));
-            int index = -1;
-            int year;
-            int month;
-            int day;
-            int hours;
-            int min;
             switch (switcher) {
-                case "1" -> storeManager.printGoods();
-                case "2" -> {
-                    System.out.print("Enter product ID: ");
-                    index = scanner.nextInt();
-                    scanner.nextLine();
-                    storeManager.addGoodToBucket(index);
-                }
-                case "3" -> storeManager.printBucket();
-                case "4" -> System.out.println("Total Price = " + storeManager.buyAllFromBucket());
-                case "5" -> storeManager.printLastFive();
-                case "6" -> storeManager.printAllOrders();
-                case "7" -> {
-                    do {
-                        System.out.print("Enter year: ");
-                        year = scanner.nextInt();
-                        if (!dateValidator.validatePositiveNumber(year)) {
-                            System.out.println("Year must be a positive number");
-                        }
-                    } while (!dateValidator.validatePositiveNumber(year));
-                    do {
-                        System.out.print("Enter month: ");
-                        month = scanner.nextInt();
-                        if (!dateValidator.validateMonth(month)) {
-                            System.out.println("month must be from 0 to 11");
-                        }
-                    } while (!dateValidator.validateMonth(month));
-                    do {
-                        System.out.print("Enter dayOfMonth: ");
-                        day = scanner.nextInt();
-                        if (!dateValidator.validateDay(year, month, day)) {
-                            System.out.println("incorrect day");
-                        }
-                    } while (!dateValidator.validateDay(year, month, day));
-                    do {
-                        System.out.print("Enter hour: ");
-                        hours = scanner.nextInt();
-                        if (!dateValidator.validateHour(hours)) {
-                            System.out.println("hour must be >= 0 and < 24");
-                        }
-                    } while (!dateValidator.validateHour(hours));
-                    do {
-                        System.out.print("Enter minute: ");
-                        min = scanner.nextInt();
-                        if (!dateValidator.validateMinute(min)) {
-                            System.out.println("minute must be >=0 and < 60");
-                        }
-                    } while (!dateValidator.validateMinute(min));
-                    LocalDateTime date1 = LocalDateTime.of(year, month, day, hours, min);
-                    do {
-                        System.out.print("Enter year: ");
-                        year = scanner.nextInt();
-                        if (!dateValidator.validatePositiveNumber(year)) {
-                            System.out.println("Year must be a positive number");
-                        }
-                    } while (!dateValidator.validatePositiveNumber(year));
-                    do {
-                        System.out.print("Enter month: ");
-                        month = scanner.nextInt();
-                        if (!dateValidator.validateMonth(month)) {
-                            System.out.println("month must be from 0 to 11");
-                        }
-                    } while (!dateValidator.validateMonth(month));
-                    do {
-                        System.out.print("Enter dayOfMonth: ");
-                        day = scanner.nextInt();
-                        if (!dateValidator.validateDay(year, month, day)) {
-                            System.out.println("incorrect day");
-                        }
-                    } while (!dateValidator.validateDay(year, month, day));
-                    do {
-                        System.out.print("Enter hour: ");
-                        hours = scanner.nextInt();
-                        if (!dateValidator.validateHour(hours)) {
-                            System.out.println("hour must be >= 0 and < 24");
-                        }
-                    } while (!dateValidator.validateHour(hours));
-                    do {
-                        System.out.print("Enter minute: ");
-                        min = scanner.nextInt();
-                        if (!dateValidator.validateMinute(min)) {
-                            System.out.println("minute must be >=0 and < 60");
-                        }
-                    } while (!dateValidator.validateMinute(min));
-                    scanner.nextLine();
-                    storeManager.printAllOrdersFromDateToDate(date1, LocalDateTime.of(year, month, day, hours, min));
-                }
-                case "8" -> {
-                    do {
-                        System.out.print("Enter year: ");
-                        year = scanner.nextInt();
-                        if (!dateValidator.validatePositiveNumber(year)) {
-                            System.out.println("Year must be a positive number");
-                        }
-                    } while (!dateValidator.validatePositiveNumber(year));
-                    do {
-                        System.out.print("Enter month: ");
-                        month = scanner.nextInt();
-                        if (!dateValidator.validateMonth(month)) {
-                            System.out.println("month must be from 0 to 11");
-                        }
-                    } while (!dateValidator.validateMonth(month));
-                    do {
-                        System.out.print("Enter dayOfMonth: ");
-                        day = scanner.nextInt();
-                        if (!dateValidator.validateDay(year, month, day)) {
-                            System.out.println("incorrect day");
-                        }
-                    } while (!dateValidator.validateDay(year, month, day));
-                    do {
-                        System.out.print("Enter hour: ");
-                        hours = scanner.nextInt();
-                        if (!dateValidator.validateHour(hours)) {
-                            System.out.println("hour must be >= 0 and < 24");
-                        }
-                    } while (!dateValidator.validateHour(hours));
-                    do {
-                        System.out.print("Enter minute: ");
-                        min = scanner.nextInt();
-                        if (!dateValidator.validateMinute(min)) {
-                            System.out.println("minute must be >=0 and < 60");
-                        }
-                    } while (!dateValidator.validateMinute(min));
-                    scanner.nextLine();
-                    storeManager.printClosestDateOrder(LocalDateTime.of(year, month, day, hours, min));
-                }
+                case "1" -> commandFactory.getCommand(StoreCommandName.PRINT_ALL_GOODS).execute(scanner, storeManager);
+                case "2" -> commandFactory.getCommand(StoreCommandName.ADD_TO_BUCKET).execute(scanner, storeManager);
+                case "3" -> commandFactory.getCommand(StoreCommandName.PRINT_BUCKET).execute(scanner, storeManager);
+                case "4" -> commandFactory.getCommand(StoreCommandName.ADD_ALL).execute(scanner, storeManager);
+                case "5" -> commandFactory.getCommand(StoreCommandName.PRINT_LAST_FIVE).execute(scanner, storeManager);
+                case "6" -> commandFactory.getCommand(StoreCommandName.PRINT_ORDERS).execute(scanner, storeManager);
+                case "7" -> commandFactory.getCommand(StoreCommandName.DATE_TO_DATE).execute(scanner, storeManager);
+                case "8" -> commandFactory.getCommand(StoreCommandName.CLOSEST_DATE).execute(scanner, storeManager);
             }
         }
     }
