@@ -1,7 +1,6 @@
 package com.epam.file;
 
 import com.epam.container.TransportList;
-import com.epam.transport.Automobile;
 import com.epam.transport.Transport;
 
 import java.io.*;
@@ -27,9 +26,8 @@ public class GoodsSerialize<T extends Transport> {
             return transportList;
 
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Read exception");
+            throw new RuntimeException(String.format("Unable to read file[%s]. Failed with message [%s]", fileName, e.getMessage()));
         }
-        return null;
     }
 
     public void save(TransportList<T> transportList) {
@@ -38,7 +36,7 @@ public class GoodsSerialize<T extends Transport> {
 
     public void save(TransportList<T> transportList, int times) {
         for (int i = 0; i < times; i++) {
-            save(transportList);
+            defaultSave(transportList);
         }
     }
 
@@ -52,7 +50,7 @@ public class GoodsSerialize<T extends Transport> {
             objectOutputStream.close();
             fileOutputStream.close();
         } catch (IOException e) {
-            System.out.println("Write exception");
+            throw new RuntimeException(String.format("Unable to write to file [%s]. Failed with message [%s]", fileName, e.getMessage()));
         }
     }
 
@@ -68,7 +66,7 @@ public class GoodsSerialize<T extends Transport> {
             fileOutputStream.close();
             gzipOutputStream.close();
         } catch (IOException e) {
-            System.out.println("Write exception");
+            throw new RuntimeException(String.format("Unable to write(GZip) to file [%s]. Failed with message [%s]", fileName, e.getMessage()));
         }
     }
 }
