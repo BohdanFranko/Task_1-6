@@ -34,7 +34,6 @@ public class Inputer {
         System.out.println("Input extension");
         return scanner.nextLine();
     }
-a
     public Long inputSize() {
         System.out.println("Input size:");
         return scanner.nextLong();

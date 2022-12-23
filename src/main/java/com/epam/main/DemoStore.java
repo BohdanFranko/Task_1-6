@@ -8,6 +8,7 @@ import com.epam.transport.VehicleType;
 import com.epam.validator.SwitcherValidator;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class DemoStore {
     public static void main(String[] args) {
@@ -35,11 +36,16 @@ public class DemoStore {
             System.out.println("Enter 8 to print the order with the closest Date");
             System.out.println("Enter 0 to exit program");
             System.out.println("--------------------------------------------------");
+            Map<String, Consumer<String>> saleStrategy = new HashMap<>();
+            saleStrategy.put("1",str -> commandFactory.getCommand(StoreCommandName.PRINT_ALL_GOODS).execute(scanner, storeManager));
+            saleStrategy.put("2",str -> commandFactory.getCommand(StoreCommandName.ADD_TO_BUCKET).execute(scanner, storeManager));
             do {
+
                 switcher = scanner.nextLine();
                 if (!switcherValidator.validate(switcher)) {
                     System.out.println("Must be a number from 0 to 9");
                 }
+                saleStrategy.get(switcher).accept("");
             } while (!switcherValidator.validate(switcher));
             switch (switcher) {
                 case "1" -> commandFactory.getCommand(StoreCommandName.PRINT_ALL_GOODS).execute(scanner, storeManager);
@@ -51,6 +57,7 @@ public class DemoStore {
                 case "7" -> commandFactory.getCommand(StoreCommandName.DATE_TO_DATE).execute(scanner, storeManager);
                 case "8" -> commandFactory.getCommand(StoreCommandName.CLOSEST_DATE).execute(scanner, storeManager);
             }
+            saleStrategy.get("1").accept("");
         }
     }
 }
