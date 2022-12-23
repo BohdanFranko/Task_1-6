@@ -13,7 +13,7 @@ import java.util.function.Predicate;
  */
 public class TransportListIWithIteratorSnapshot<T extends Transport> extends TransportList<T> {
 
-    private static class TransportListIterator<T> implements Iterator<T> {
+    private class TransportListIterator<T> implements Iterator<T> {
 
         private final Object[] snapshotContainer = Arrays.copyOf(getContainerOfTransports(), getSize());
 
