@@ -1,13 +1,18 @@
 package com.epam.command.store;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 public class StoreCommandFactory {
     private static final Map<String, StoreCommand> commands = new HashMap<>();
 
-    private StoreCommandFactory() {
+    public static void add(String name, StoreCommand command) {
+        commands.put(name, command);
+    }
+
+    public static void defaultInit() {
         commands.put(StoreCommandName.PRINT_ALL_GOODS, new PrintAllGoodsCommand());
         commands.put(StoreCommandName.ADD_TO_BUCKET, new AddGoodToBucketCommand());
         commands.put(StoreCommandName.PRINT_BUCKET, new PrintBucketCommand());
