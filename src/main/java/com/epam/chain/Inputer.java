@@ -34,8 +34,24 @@ public class Inputer {
         System.out.println("Input extension");
         return scanner.nextLine();
     }
+
     public Long inputSize() {
         System.out.println("Input size:");
         return scanner.nextLong();
+    }
+
+    public boolean InputTypeOfAdd() {
+        System.out.println("1 - Auto, 0 - Manually");
+        String type;
+        do {
+            type = scanner.nextLine();
+            if (type.length() != 1 || type.charAt(0) > '1' || type.charAt(0) < '0') {
+                System.out.println("Input only 1 or 0");
+            }
+        } while (type.length() != 1 || type.charAt(0) > '1' || type.charAt(0) < '0');
+        return switch (type) {
+            case "1" -> true;
+            default -> false;
+        };
     }
 }

@@ -1,6 +1,7 @@
 package com.epam.main;
 
-import com.epam.command.store.StoreCommandFactory;
+import com.epam.command.CommandFactory;
+import com.epam.command.store.StoreCommand;
 import com.epam.command.store.StoreCommandName;
 import com.epam.store.StoreManager;
 import com.epam.transport.Automobile;
@@ -20,7 +21,8 @@ public class DemoStore {
 
         Scanner scanner = new Scanner(System.in);
 
-        StoreCommandFactory commandFactory = StoreCommandFactory.getInstance();
+        CommandFactory<StoreCommand> commandFactory = CommandFactory.getInstance();
+        commandFactory.defaultStore();
 
         SwitcherValidator switcherValidator = new SwitcherValidator();
         String switcher = "a";
@@ -37,27 +39,24 @@ public class DemoStore {
             System.out.println("Enter 0 to exit program");
             System.out.println("--------------------------------------------------");
             Map<String, Consumer<String>> saleStrategy = new HashMap<>();
-            saleStrategy.put("1",str -> commandFactory.getCommand(StoreCommandName.PRINT_ALL_GOODS).execute(scanner, storeManager));
-            saleStrategy.put("2",str -> commandFactory.getCommand(StoreCommandName.ADD_TO_BUCKET).execute(scanner, storeManager));
-            do {
+            saleStrategy.put("1", str -> commandFactory.getCommand(StoreCommandName.PRINT_ALL_GOODS).execute(scanner, storeManager));
+            saleStrategy.put("2", str -> commandFactory.getCommand(StoreCommandName.ADD_TO_BUCKET).execute(scanner, storeManager));
+            saleStrategy.put("3", str -> commandFactory.getCommand(StoreCommandName.PRINT_BUCKET).execute(scanner, storeManager));
+            saleStrategy.put("4", str -> commandFactory.getCommand(StoreCommandName.ADD_ALL).execute(scanner, storeManager));
+            saleStrategy.put("5", str -> commandFactory.getCommand(StoreCommandName.PRINT_LAST_FIVE).execute(scanner, storeManager));
+            saleStrategy.put("6", str -> commandFactory.getCommand(StoreCommandName.PRINT_ORDERS).execute(scanner, storeManager));
+            saleStrategy.put("7", str -> commandFactory.getCommand(StoreCommandName.DATE_TO_DATE).execute(scanner, storeManager));
+            saleStrategy.put("8", str -> commandFactory.getCommand(StoreCommandName.CLOSEST_DATE).execute(scanner, storeManager));
+            saleStrategy.put("0", str -> commandFactory.getCommand(StoreCommandName.DEFAULT_COMMAND).execute(scanner, storeManager));
 
+            do {
                 switcher = scanner.nextLine();
                 if (!switcherValidator.validate(switcher)) {
                     System.out.println("Must be a number from 0 to 9");
                 }
                 saleStrategy.get(switcher).accept("");
             } while (!switcherValidator.validate(switcher));
-            switch (switcher) {
-                case "1" -> commandFactory.getCommand(StoreCommandName.PRINT_ALL_GOODS).execute(scanner, storeManager);
-                case "2" -> commandFactory.getCommand(StoreCommandName.ADD_TO_BUCKET).execute(scanner, storeManager);
-                case "3" -> commandFactory.getCommand(StoreCommandName.PRINT_BUCKET).execute(scanner, storeManager);
-                case "4" -> commandFactory.getCommand(StoreCommandName.ADD_ALL).execute(scanner, storeManager);
-                case "5" -> commandFactory.getCommand(StoreCommandName.PRINT_LAST_FIVE).execute(scanner, storeManager);
-                case "6" -> commandFactory.getCommand(StoreCommandName.PRINT_ORDERS).execute(scanner, storeManager);
-                case "7" -> commandFactory.getCommand(StoreCommandName.DATE_TO_DATE).execute(scanner, storeManager);
-                case "8" -> commandFactory.getCommand(StoreCommandName.CLOSEST_DATE).execute(scanner, storeManager);
-            }
-            saleStrategy.get("1").accept("");
+
         }
     }
 }

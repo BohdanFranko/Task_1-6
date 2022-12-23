@@ -7,6 +7,5 @@ import java.util.Scanner;
 public class DefaultCommand implements StoreCommand {
     @Override
     public void execute(Scanner scanner, StoreManager storeManager) {
-        System.out.println("Default");
     }
 }

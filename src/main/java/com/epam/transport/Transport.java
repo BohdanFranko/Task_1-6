@@ -1,9 +1,11 @@
 package com.epam.transport;
 
+import java.io.Serializable;
+
 /**
  * Class Transport that contains fields and methods to describe a Transport.
  */
-public abstract class Transport {
+public abstract class Transport implements Serializable {
 
     private int speed;
     private int capacity;
