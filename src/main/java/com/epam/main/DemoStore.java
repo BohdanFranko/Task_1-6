@@ -22,7 +22,7 @@ public class DemoStore {
         Scanner scanner = new Scanner(System.in);
 
         CommandFactory<StoreCommand> commandFactory = CommandFactory.getInstance();
-        commandFactory.defaultStore();
+        commandFactory.defaultStore(commandFactory);
 
         SwitcherValidator switcherValidator = new SwitcherValidator();
         String switcher = "a";

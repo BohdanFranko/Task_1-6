@@ -18,7 +18,7 @@ public class DemoSerialize {
     public static void main(String[] args) {
         final String fileName = "D:\\Testic\\goods";
         CommandFactory<SerializeCommand> commandFactory = CommandFactory.getInstance();
-        commandFactory.defaultSerialize();
+        commandFactory.defaultSerialize(commandFactory);
         GoodsSerialize<Automobile> goodsSerialize = new GoodsSerialize<>(fileName);
         Scanner scanner = new Scanner(System.in);
         String switcher;
