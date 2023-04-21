@@ -3,22 +3,26 @@ package com.epam.container;
 import com.epam.exceptions.NotSupportedException;
 import com.epam.transport.Transport;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
 /**
  * Class TransportList that implements and contains methods of List interface.
  */
-public class TransportList<T extends Transport> implements List<T> {
+public class TransportList<T extends Transport> implements List<T>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final static int INITIAL_CAPACITY = 5;
-    private static int size;
-    private static Object[] containerOfTransports;
+    private int size;
+    private Object[] containerOfTransports;
 
-    public static int getSize() {
+    public int getSize() {
         return size;
     }
 
-    public static Object[] getContainerOfTransports() {
+    public Object[] getContainerOfTransports() {
         return containerOfTransports;
     }
 
@@ -34,7 +38,7 @@ public class TransportList<T extends Transport> implements List<T> {
     /**
      * Class TransportListIterator that implements methods of Iterator interface.
      */
-    private static class TransportListIterator<T> implements Iterator<T> {
+    private class TransportListIterator<T> implements Iterator<T> {
 
         private Predicate<T> predicate;
         private int counter;

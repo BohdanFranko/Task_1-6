@@ -1,5 +1,7 @@
 package com.epam.transport;
 
+import java.io.Serializable;
+
 /**
  * Class Vehicle that contains fields and methods and extends class Transport.
  */

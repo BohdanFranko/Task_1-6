@@ -1,5 +1,6 @@
 package com.epam.transport;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
